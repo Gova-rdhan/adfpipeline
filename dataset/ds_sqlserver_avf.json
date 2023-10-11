@@ -1,0 +1,25 @@
+{
+	"name": "ds_sqlserver_avf",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_avf",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"stable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "avf",
+			"table": {
+				"value": "@dataset().stable",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

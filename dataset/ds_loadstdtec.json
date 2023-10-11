@@ -1,0 +1,54 @@
+{
+	"name": "ds_loadstdtec",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sampledb1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "slno",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "sourcetable",
+				"type": "nvarchar"
+			},
+			{
+				"name": "destinationtable",
+				"type": "nvarchar"
+			},
+			{
+				"name": "loadtype",
+				"type": "nvarchar"
+			},
+			{
+				"name": "query",
+				"type": "nvarchar"
+			},
+			{
+				"name": "isactive",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "watermark_colmn",
+				"type": "nvarchar"
+			},
+			{
+				"name": "rundate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "ags",
+			"table": "loadstdtec"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

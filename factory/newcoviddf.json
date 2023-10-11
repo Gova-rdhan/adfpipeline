@@ -1,0 +1,9 @@
+{
+	"name": "newcoviddf",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "de5c1572-7bcf-465c-b67b-5943acdfe250",
+		"tenantId": "25a1d5f3-186e-4e7d-aaaf-1ae023d564fb"
+	}
+}

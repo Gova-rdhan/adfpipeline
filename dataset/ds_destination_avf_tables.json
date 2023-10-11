@@ -1,0 +1,25 @@
+{
+	"name": "ds_destination_avf_tables",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ds_avf_destination_tables",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dtable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "avf",
+			"table": {
+				"value": "@dataset().dtable",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

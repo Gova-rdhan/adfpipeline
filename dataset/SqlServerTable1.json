@@ -1,0 +1,40 @@
+{
+	"name": "SqlServerTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver_coviddb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "slno",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "source_table",
+				"type": "varchar"
+			},
+			{
+				"name": "destination_table",
+				"type": "varchar"
+			},
+			{
+				"name": "query",
+				"type": "varchar"
+			},
+			{
+				"name": "is_active",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "adf",
+			"table": "load_table"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
