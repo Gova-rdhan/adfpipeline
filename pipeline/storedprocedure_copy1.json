@@ -1,0 +1,347 @@
+{
+	"name": "storedprocedure_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Loading the data isactive",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@concat('select slno from ',variables('schema'),'.',variables('tablename'),' WHERE is_active = 1')",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_avf_loadtable",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Loading the data isactive",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Loading the data isactive').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Lookup1",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT SLNO,\nSOURCE_TABLE,\nDESTINATION_TABLE,\nQUERY,\nLOAD_TYPE,\nUPDATE_QUERY\n FROM AVF.LOAD_TABLE WHERE IS_ACTIVE = 1 AND SLNO = '\n, item().slno)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_avf_loadtable",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Lookup1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Lookup1').output.firstRow.LOAD_TYPE,'full')",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Script1",
+										"type": "Script",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "ls_Avf_sampledb",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "@concat('TRUNCATE TABLE ',variables('schema'),'.',activity('Lookup1').output.firstRow.DESTINATION_TABLE)",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Script2",
+							"type": "Script",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "ls_Avf_sampledb",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "@activity('Lookup1').output.firstRow.UPDATE_QUERY",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Script3",
+							"type": "Script",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [
+								{
+									"activity": "Script2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "ls_Avf_sampledb",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "UPDATE avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE} \nSET\n    avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.name_s = avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.name_s,\n    avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.age = avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.age,\n    avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.salary = avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.salary,\n\tavf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.pd_date = avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.pd_date\nFROM\n    avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE} \nWHERE\n     avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.slno = avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.slno\n    AND avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}.pd_date > avf.@{activity('Lookup1').output.firstRow.DESTINATION_TABLE}.pd_date;",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Stored procedure1",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Lookup2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[avf].[UpsertData]",
+								"storedProcedureParameters": {
+									"age": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.age",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"batchid": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.batch_id",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"destination_table": {
+										"value": {
+											"value": "avf.@{activity('Lookup1').output.firstRow.destination_table}",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"name_s": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.name_s",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"pdate": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.pd_date",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"salary": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.salary",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"slno": {
+										"value": {
+											"value": "@activity('Lookup2').output.firstRow.slno",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"source_table": {
+										"value": {
+											"value": "avf.@{activity('Lookup1').output.firstRow.source_table}",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_Avf_sampledb",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Lookup2",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "If Condition1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT * FROM avf.@{activity('Lookup1').output.firstRow.SOURCE_TABLE}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_sqlserver_avf",
+									"type": "DatasetReference",
+									"parameters": {
+										"stable": {
+											"value": "@activity('Lookup1').output.firstRow.SOURCE_TABLE",
+											"type": "Expression"
+										}
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"schema": {
+				"type": "String",
+				"defaultValue": "avf"
+			},
+			"tablename": {
+				"type": "String",
+				"defaultValue": "load_table"
+			},
+			"maxdate": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-09-23T19:16:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
