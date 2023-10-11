@@ -1,0 +1,93 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "newcoviddf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage2_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"LS_GEN2_SOURCE_EXCEL_accountKey": {
+			"value": ""
+		},
+		"SqlServer1_connectionString": {
+			"value": ""
+		},
+		"ds_avf_destination_tables_connectionString": {
+			"value": ""
+		},
+		"ds_gen2_newfile_accountKey": {
+			"value": ""
+		},
+		"ls_Avf_sampledb_connectionString": {
+			"value": ""
+		},
+		"ls_avf_connectionString": {
+			"value": ""
+		},
+		"ls_blob_dest_connectionString": {
+			"value": ""
+		},
+		"ls_datalake_raw_accountKey": {
+			"value": ""
+		},
+		"ls_datalake_samplefile_accountKey": {
+			"value": ""
+		},
+		"ls_gen2_accountKey": {
+			"value": ""
+		},
+		"ls_gen2_raw_accountKey": {
+			"value": ""
+		},
+		"ls_gen2_simplefile_accountKey": {
+			"value": ""
+		},
+		"ls_sampledb_connectionString": {
+			"value": ""
+		},
+		"ls_sampledb1_connectionString": {
+			"value": ""
+		},
+		"ls_sqlserver_coviddb_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"LS_GEN2_SOURCE_EXCEL_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ds_gen2_newfile_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_datalake_raw_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_datalake_samplefile_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_raw_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_simplefile_properties_typeProperties_url": {
+			"value": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		}
+	}
+}

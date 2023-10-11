@@ -1,0 +1,258 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "newcoviddf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDataLakeStorage2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage2'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"LS_GEN2_SOURCE_EXCEL_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_GEN2_SOURCE_EXCEL'"
+		},
+		"SqlServer1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer1'"
+		},
+		"ds_avf_destination_tables_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ds_avf_destination_tables'"
+		},
+		"ds_gen2_newfile_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ds_gen2_newfile'"
+		},
+		"ls_Avf_sampledb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_Avf_sampledb'"
+		},
+		"ls_avf_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_avf'"
+		},
+		"ls_blob_dest_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_blob_dest'"
+		},
+		"ls_datalake_raw_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_datalake_raw'"
+		},
+		"ls_datalake_samplefile_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_datalake_samplefile'"
+		},
+		"ls_gen2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_gen2'"
+		},
+		"ls_gen2_raw_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_gen2_raw'"
+		},
+		"ls_gen2_simplefile_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_gen2_simplefile'"
+		},
+		"ls_sampledb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sampledb'"
+		},
+		"ls_sampledb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sampledb1'"
+		},
+		"ls_sqlserver_coviddb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sqlserver_coviddb'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"LS_GEN2_SOURCE_EXCEL_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ds_gen2_newfile_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_datalake_raw_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_datalake_samplefile_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_raw_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"ls_gen2_simplefile_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sourcedatalakeecdc.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "newcoviddf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"AzureDataLakeStorage2_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage2_accountKey')]"
+					},
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
+					},
+					"LS_GEN2_SOURCE_EXCEL_accountKey": {
+						"value": "[parameters('LS_GEN2_SOURCE_EXCEL_accountKey')]"
+					},
+					"SqlServer1_connectionString": {
+						"value": "[parameters('SqlServer1_connectionString')]"
+					},
+					"ds_avf_destination_tables_connectionString": {
+						"value": "[parameters('ds_avf_destination_tables_connectionString')]"
+					},
+					"ds_gen2_newfile_accountKey": {
+						"value": "[parameters('ds_gen2_newfile_accountKey')]"
+					},
+					"ls_Avf_sampledb_connectionString": {
+						"value": "[parameters('ls_Avf_sampledb_connectionString')]"
+					},
+					"ls_avf_connectionString": {
+						"value": "[parameters('ls_avf_connectionString')]"
+					},
+					"ls_blob_dest_connectionString": {
+						"value": "[parameters('ls_blob_dest_connectionString')]"
+					},
+					"ls_datalake_raw_accountKey": {
+						"value": "[parameters('ls_datalake_raw_accountKey')]"
+					},
+					"ls_datalake_samplefile_accountKey": {
+						"value": "[parameters('ls_datalake_samplefile_accountKey')]"
+					},
+					"ls_gen2_accountKey": {
+						"value": "[parameters('ls_gen2_accountKey')]"
+					},
+					"ls_gen2_raw_accountKey": {
+						"value": "[parameters('ls_gen2_raw_accountKey')]"
+					},
+					"ls_gen2_simplefile_accountKey": {
+						"value": "[parameters('ls_gen2_simplefile_accountKey')]"
+					},
+					"ls_sampledb_connectionString": {
+						"value": "[parameters('ls_sampledb_connectionString')]"
+					},
+					"ls_sampledb1_connectionString": {
+						"value": "[parameters('ls_sampledb1_connectionString')]"
+					},
+					"ls_sqlserver_coviddb_connectionString": {
+						"value": "[parameters('ls_sqlserver_coviddb_connectionString')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage2_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage2_properties_typeProperties_url')]"
+					},
+					"LS_GEN2_SOURCE_EXCEL_properties_typeProperties_url": {
+						"value": "[parameters('LS_GEN2_SOURCE_EXCEL_properties_typeProperties_url')]"
+					},
+					"ds_gen2_newfile_properties_typeProperties_url": {
+						"value": "[parameters('ds_gen2_newfile_properties_typeProperties_url')]"
+					},
+					"ls_datalake_raw_properties_typeProperties_url": {
+						"value": "[parameters('ls_datalake_raw_properties_typeProperties_url')]"
+					},
+					"ls_datalake_samplefile_properties_typeProperties_url": {
+						"value": "[parameters('ls_datalake_samplefile_properties_typeProperties_url')]"
+					},
+					"ls_gen2_properties_typeProperties_url": {
+						"value": "[parameters('ls_gen2_properties_typeProperties_url')]"
+					},
+					"ls_gen2_raw_properties_typeProperties_url": {
+						"value": "[parameters('ls_gen2_raw_properties_typeProperties_url')]"
+					},
+					"ls_gen2_simplefile_properties_typeProperties_url": {
+						"value": "[parameters('ls_gen2_simplefile_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "newcoviddf_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'newcoviddf_ArmTemplate_0')]"
+			]
+		}
+	]
+}
